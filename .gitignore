@@ -1,0 +1,10 @@
+/.mypy_cache
+package-lock.json
+pnpm-lock.yaml
+Server/env
+.env
+__pycache__
+olddata.xls
+restore.sql
+backup.sql
+*.pem
