@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - backend-network
+
+  backend:
+    build: ./Server
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      STORE_ID: 0
+      HOST: db
+      DATABASE: postgres
+      USER: postgres
+      PASS: postgres
+      SECRET: postgres
+      ALGORITHM: HS256
+    networks:
+      - backend-network
+
+  frontend:
+    build: ./Store
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+      VITE_SERVER_URL: http://localhost:8000
+      VITE_STORE_ID: 0
+    networks:
+      - frontend-network
+
+volumes:
+  postgres_data:
+
+networks:
+  backend-network:
+  frontend-network:
